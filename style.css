@@ -1,0 +1,298 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 650px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    text-align: center;
+    position: relative;
+}
+
+/* تحسينات شاملة للقائمة المنسدلة */
+.lang-switch {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    width: auto;
+}
+
+.lang-switch select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    max-width: 140px;
+    text-overflow: ellipsis;
+}
+
+/* للغات التي تكتب من اليسار لليمين */
+html[dir="ltr"] .lang-switch {
+    right: auto;
+    left: 15px;
+}
+
+h1 {
+    color: #302b63;
+    margin-bottom: 5px;
+    font-size: 24px;
+    padding: 0 50px;
+    word-wrap: break-word;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 25px;
+    padding: 0 50px;
+}
+
+.upload-area {
+    border: 3px dashed #302b63;
+    border-radius: 10px;
+    padding: 40px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upload-area:hover {
+    background: #f0edff;
+    border-color: #5548d9;
+}
+
+.upload-icon {
+    font-size: 50px;
+}
+
+.file-info {
+    background: #f5f3ff;
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: right;
+}
+
+.file-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.file-info li {
+    margin: 5px 0;
+}
+
+.convert-section {
+    margin-top: 20px;
+}
+
+select, button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    font-family: inherit;
+    min-width: 48px;
+    min-height: 48px;
+}
+
+button {
+    background: #302b63;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #5548d9;
+}
+
+.ad-btn {
+    background: #ff9800;
+}
+.ad-btn:hover {
+    background: #f57c00;
+}
+
+.status {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    display: none;
+}
+
+.status.success {
+    display: block;
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.error {
+    display: block;
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.download-option {
+    margin-top: 15px;
+    text-align: right;
+}
+.download-option label {
+    display: block;
+    margin: 5px 0;
+    cursor: pointer;
+    font-size: 14px;
+}
+.zip-note {
+    color: #856404;
+    background: #fff3cd;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.subscription-section {
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.plans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.plan {
+    flex: 1 1 150px;
+    background: #f9f9ff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.plan h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #302b63;
+    margin-bottom: 10px;
+}
+
+.subscribe-btn {
+    background: #4caf50;
+    font-size: 14px;
+}
+
+.subscribe-btn:hover {
+    background: #45a049;
+}
+
+html[dir="ltr"] .file-info,
+html[dir="ltr"] .download-option {
+    text-align: left;
+}
+
+/* ========== تنسيق الإعلان المنبثق ========== */
+.ad-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ad-modal {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+}
+.ad-timer {
+    background: #302b63;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 auto 20px auto;
+}
+.ad-slide {
+    display: none;
+}
+.ad-slide.active {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+.ad-slide h2 {
+    margin: 10px 0;
+    color: #302b63;
+}
+.ad-slide p {
+    color: #555;
+}
+#adCompleteBtn {
+    margin-top: 20px;
+    background: #4caf50;
+    font-size: 16px;
+}
+#adCompleteBtn:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 20px;
+    }
+    .plan {
+        flex: 1 1 100%;
+    }
+    h1 {
+        font-size: 20px;
+        padding: 0 40px;
+    }
+    .lang-switch select {
+        max-width: 110px;
+    }
+}
