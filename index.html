@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="title">SecureConvert - محول الملفات الآمن 🔒</title>
+    
+    <!-- أيقونة الموقع -->
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- مكتبات PDF، ZIP، حفظ الملفات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <!-- مكتبة الترجمة i18next -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/23.7.16/i18next.min.js"></script>
+    
+    <!-- مكتبة معالجة PDF محلياً -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    
+    <!-- مكتبة تحويل Word إلى HTML/نص -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- قائمة اختيار اللغة المنسدلة -->
+        <div class="lang-switch">
+            <select id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="zh">中文</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ru">Русский</option>
+                <option value="pt">Português</option>
+                <option value="ja">日本語</option>
+                <option value="ko">한국어</option>
+                <option value="bn">বাংলা</option>
+                <option value="id">Bahasa Indonesia</option>
+                <option value="ur">اردو</option>
+            </select>
+        </div>
+
+        <h1 data-i18n="title">SecureConvert - محول الملفات الآمن 🔒</h1>
+        <p class="subtitle" data-i18n="subtitle">جميع التحويلات تتم داخل متصفحك - لا نرفع ملفاتك لأي خادم</p>
+
+        <!-- منطقة رفع الملفات (متعددة) -->
+        <div class="upload-area" id="uploadZone">
+            <span class="upload-icon">📁</span>
+            <p data-i18n="uploadText">اسحب ملفاتك هنا أو اضغط للاختيار</p>
+            <input type="file" id="fileInput" hidden multiple>
+        </div>
+
+        <!-- معلومات الملفات المختارة -->
+        <div class="file-info" id="fileInfo" style="display:none;">
+            <p><strong data-i18n="selectedFiles">الملفات المختارة:</strong></p>
+            <ul id="fileList"></ul>
+        </div>
+
+        <!-- اختيار صيغة التحويل -->
+        <div class="convert-section" id="convertSection" style="display:none;">
+            <label for="targetFormat" data-i18n="convertTo">حوّل إلى:</label>
+            <select id="targetFormat">
+                <option value="">-- اختيار --</option>
+            </select>
+
+            <!-- خيار طريقة التحميل -->
+            <div class="download-option">
+                <label>
+                    <input type="radio" name="downloadMode" value="separate" checked>
+                    <span data-i18n="separateDownload">تحميل كل ملف منفصل</span>
+                </label>
+                <label>
+                    <input type="radio" name="downloadMode" value="zip">
+                    <span data-i18n="zipDownload">تحميل الكل كـ ZIP</span>
+                </label>
+                <small class="zip-note" style="display:none;" data-i18n="zipNote">ملاحظة: قد يظهر تحذير أمان في Windows، يمكنك تجاهله بأمان فالملفات سليمة.</small>
+            </div>
+
+            <!-- زر الإعلان للمجانيين -->
+            <button id="adBtn" class="ad-btn" style="display:block;" data-i18n="watchAd">شاهد إعلاناً للتحويل</button>
+            <!-- زر التحويل الرئيسي (يظهر بعد مشاهدة الإعلان أو للمشتركين) -->
+            <button id="convertBtn" data-i18n="convertBtn" style="display:none;">تحويل وتحميل</button>
+        </div>
+
+        <!-- رسائل الحالة -->
+        <div class="status" id="statusMessage"></div>
+
+        <!-- قسم الاشتراكات (مخفي مؤقتاً) -->
+        <div class="subscription-section" id="subscribeSection" style="display: none;">
+            <h2 data-i18n="subscribeNow">اشترك الآن</h2>
+            <div class="plans">
+                <div class="plan">
+                    <h3 data-i18n="planBasic">أساسية (100 تحويلة)</h3>
+                    <p class="price" data-i18n="priceBasic">8$ شهرياً</p>
+                    <button class="subscribe-btn" data-plan="basic">اشترك</button>
+                </div>
+                <div class="plan">
+                    <h3 data-i18n="planPro">احترافية (500 تحويلة)</h3>
+                    <p class="price" data-i18n="pricePro">24$ شهرياً</p>
+                    <button class="subscribe-btn" data-plan="pro">اشترك</button>
+                </div>
+                <div class="plan">
+                    <h3 data-i18n="planBusiness">أعمال (2000 تحويلة)</h3>
+                    <p class="price" data-i18n="priceBusiness">80$ شهرياً</p>
+                    <button class="subscribe-btn" data-plan="business">اشترك</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========= الإعلان التعريفي الترويجي (Modal) ========= -->
+        <div class="ad-modal-overlay" id="adModalOverlay" style="display:none;">
+            <div class="ad-modal">
+                <div class="ad-timer" id="adTimer">30</div>
+                <div class="ad-slides" id="adSlides">
+                    <div class="ad-slide active">
+                        <span style="font-size:50px;">🔒</span>
+                        <h2 data-i18n="adTitle1">خصوصية مطلقة</h2>
+                        <p data-i18n="adDesc1">ملفاتك لا تغادر جهازك أبداً</p>
+                    </div>
+                    <div class="ad-slide">
+                        <span style="font-size:50px;">⚡</span>
+                        <h2 data-i18n="adTitle2">سرعة فائقة</h2>
+                        <p data-i18n="adDesc2">تحويل فوري بدون انتظار</p>
+                    </div>
+                    <div class="ad-slide">
+                        <span style="font-size:50px;">🌍</span>
+                        <h2 data-i18n="adTitle3">14 لغة عالمية</h2>
+                        <p data-i18n="adDesc3">استخدم الأداة بلغتك الأم</p>
+                    </div>
+                    <div class="ad-slide">
+                        <span style="font-size:50px;">📄</span>
+                        <h2 data-i18n="adTitle4">صيغ متعددة</h2>
+                        <p data-i18n="adDesc4">صور، مستندات، PDF والمزيد</p>
+                    </div>
+                    <div class="ad-slide">
+                        <span style="font-size:50px;">🏆</span>
+                        <h2 data-i18n="adTitle5">جرب الآن مجاناً</h2>
+                        <p data-i18n="adDesc5">شاهد الإعلان وابدأ التحويل</p>
+                    </div>
+                </div>
+                <button id="adCompleteBtn" disabled data-i18n="adComplete">يرجى الانتظار...</button>
+            </div>
+        </div>
+
+        <!-- تذييل الصفحات القانونية -->
+        <footer style="margin-top:30px; font-size:13px; color:#888; text-align:center;">
+            <a href="about.html">من نحن</a> &nbsp;|&nbsp; 
+            <a href="privacy.html">سياسة الخصوصية</a> &nbsp;|&nbsp;
+            <a href="terms.html">الشروط والأحكام</a> &nbsp;|&nbsp;
+            <a href="contact.html">اتصل بنا</a>
+        </footer>
+    </div>
+
+    <!-- الكود البرمجي الرئيسي -->
+    <script src="script.js"></script>
+    
+    <!-- تسجيل عامل الخدمة (PWA) -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js');
+        });
+      }
+    </script>
+</body>
+</html>
